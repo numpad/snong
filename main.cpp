@@ -6,17 +6,29 @@
 #include "Random.hpp"
 #include "Background.hpp"
 #include "Ball.hpp"
+#include "Obstacle.hpp"
+#include "Obstacles.hpp"
+#include "SnakeGame.hpp"
 
 #define TINYC2_IMPL
 #include "tinyc2.h"
 
 int main(int argc, char *argv[]) {
 	
-	sf::RenderWindow window(sf::VideoMode(900, 600), "Pong x Snake", sf::Style::Close | sf::Style::Titlebar);
+	sf::RenderWindow window(sf::VideoMode(1018, 618), "Pong x Snake", sf::Style::Close | sf::Style::Titlebar);
 	window.setFramerateLimit(60);
 	
-	Background background(window.getSize());
-	Ball ball(c2V(450, 300), Random(0.0, 360.0)(), 2.0);
+	Background background(window);
+	Ball ball(c2V(window.getSize().x / 2.0, window.getSize().y / 2.0), Random(0.0, 360.0)(), 6.25);
+
+	Obstacles obstacles;
+	obstacles.add(Obstacle(c2V(0, 0), c2V(window.getSize().x, 24)));
+	obstacles.add(Obstacle(c2V(0, window.getSize().y - 24), c2V(window.getSize().x, window.getSize().y)));
+	obstacles.add(Obstacle(c2V(0, 24), c2V(24, window.getSize().y - 24)));
+	obstacles.add(Obstacle(c2V(window.getSize().x - 24, 24), c2V(window.getSize().x, window.getSize().y - 24)));
+	
+	SnakeGame game1(24, 24, window.getSize().x / 2.0 - 5.0, window.getSize().y - 24);
+	SnakeGame game2(window.getSize().x / 2.0 + 5.0, 24, window.getSize().x - 24, window.getSize().y - 24);
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -35,9 +47,15 @@ int main(int argc, char *argv[]) {
 		}
 
 		ball.update();
+	
+		obstacles.collide(ball, background);
 
 		/* Rendering */
 		background.clear(window);
+		obstacles.draw(window);
+		game1.draw(window);
+		game2.draw(window);
+
 		ball.draw(window);
 		window.display();
 	}

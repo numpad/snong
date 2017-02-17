@@ -1,7 +1,7 @@
 CC=g++ -std=c++14
 CFLAGS=-c -Wall -pedantic
 LDFLAGS=-lm -lsfml-graphics -lsfml-window -lsfml-system
-SOURCES=main.cpp Background.cpp Ball.cpp Random.cpp
+SOURCES=main.cpp Background.cpp Ball.cpp Random.cpp Obstacle.cpp Obstacles.cpp SnakeGame.cpp
 OBJECTS=$(SOURCES:%.cpp=%.o)
 EXECUTABLE=main
 

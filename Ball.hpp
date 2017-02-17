@@ -10,21 +10,27 @@
 class Ball {
 
 	/* Physics */
-	float radius;
+	float radiusMult;
 	c2AABB collider;
-	c2v vel;
-	float speed;
 
 	/* Graphics */
 	sf::RectangleShape shape;
 
+	sf::Clock timeAlive;
+	float startTimeout;
 public:
+	float radius, speed;
+	c2v vel;
 
 	/* c2v position, float angle in degrees, float speed */
 	Ball(c2v, float, float speed = 1.0);
 
+	void bounce();
+
 	void update();
 	void draw(sf::RenderTarget &);
+
+	c2AABB &getAABB();
 };
 
 #endif

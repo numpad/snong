@@ -1,10 +1,22 @@
 #include "SnakeGame.hpp"
 
-sf::Keyboard::Key SnakeGame::getInput() {
+SnakeGame::Direction SnakeGame::getInput() {
 	if (SnakeGame::inputs.size() == 0)
-		return sf::Keyboard::Unknown;
+		return SnakeGame::DIRECTION_UNKNOWN;
 	
-	sf::Keyboard::Key out = SnakeGame::inputs.at(0);
+	SnakeGame::Direction out = SnakeGame::DIRECTION_UNKNOWN;
+	
+	sf::Keyboard::Key key = SnakeGame::inputs.at(0);
+
+	if (key == SnakeGame::key_up)
+		out = SnakeGame::DIRECTION_UP;
+	else if (key == SnakeGame::key_down)
+		out = SnakeGame::DIRECTION_DOWN;
+	else if (key == SnakeGame::key_left)
+		out = SnakeGame::DIRECTION_LEFT;
+	else if (key == SnakeGame::key_right)
+		out = SnakeGame::DIRECTION_RIGHT;
+	
 	SnakeGame::inputs.erase(SnakeGame::inputs.begin());
 
 	return out;
@@ -37,25 +49,32 @@ void SnakeGame::setColor(sf::Color color) {
 	SnakeGame::tile.setFillColor(color);
 }
 
+void SnakeGame::setKeys(sf::Keyboard::Key up, sf::Keyboard::Key down, sf::Keyboard::Key left, sf::Keyboard::Key right) {
+	SnakeGame::key_up = up;
+	SnakeGame::key_down = down;
+	SnakeGame::key_left = left;
+	SnakeGame::key_right = right;
+}
+
 void SnakeGame::receiveInput() {
 	if (SnakeGame::inputs.size() > 3)
 		return;
 	
 	sf::Keyboard::Key input = sf::Keyboard::Unknown;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		input = sf::Keyboard::Left;
+	if (sf::Keyboard::isKeyPressed(SnakeGame::key_left) && !sf::Keyboard::isKeyPressed(SnakeGame::key_right)) {
+		input = SnakeGame::key_left;
 	}
 
-	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		input = sf::Keyboard::Right;
+	if (!sf::Keyboard::isKeyPressed(SnakeGame::key_left) && sf::Keyboard::isKeyPressed(SnakeGame::key_right)) {
+		input = SnakeGame::key_right;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		input = sf::Keyboard::Up;
+	if (sf::Keyboard::isKeyPressed(SnakeGame::key_up) && !sf::Keyboard::isKeyPressed(SnakeGame::key_down)) {
+		input = SnakeGame::key_up;
 	}
 
-	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		input = sf::Keyboard::Down;
+	if (!sf::Keyboard::isKeyPressed(SnakeGame::key_up) && sf::Keyboard::isKeyPressed(SnakeGame::key_down)) {
+		input = SnakeGame::key_down;
 	}
 
 	if (input != sf::Keyboard::Unknown)
@@ -66,19 +85,19 @@ void SnakeGame::update() {
 
 	/* Handle input */
 	switch (SnakeGame::getInput()) {
-		case sf::Keyboard::Left:
+		case SnakeGame::DIRECTION_LEFT:
 			SnakeGame::snake.dx = -1;
 			SnakeGame::snake.dy =  0;
 			break;
-		case sf::Keyboard::Right:
+		case SnakeGame::DIRECTION_RIGHT:
 			SnakeGame::snake.dx =  1;
 			SnakeGame::snake.dy =  0;
 			break;
-		case sf::Keyboard::Up:
+		case SnakeGame::DIRECTION_UP:
 			SnakeGame::snake.dx =  0;
 			SnakeGame::snake.dy = -1;
 			break;
-		case sf::Keyboard::Down:
+		case SnakeGame::DIRECTION_DOWN:
 			SnakeGame::snake.dx =  0;
 			SnakeGame::snake.dy =  1;
 			break;

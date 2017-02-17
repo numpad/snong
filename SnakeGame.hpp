@@ -7,6 +7,12 @@
 #include "tinyc2.h"
 
 class SnakeGame {
+	enum Direction {
+		DIRECTION_UP, DIRECTION_DOWN,
+		DIRECTION_LEFT, DIRECTION_RIGHT,
+		DIRECTION_UNKNOWN
+	};
+
 	sf::IntRect area;
 	int tileSize;
 	int gridWidth, gridHeight;
@@ -18,8 +24,6 @@ class SnakeGame {
 	sf::Clock timestep;
 	float timestepDuration;
 
-	std::vector<sf::Keyboard::Key> inputs;
-
 	/* Snake */
 	struct {
 		int x, y;
@@ -27,13 +31,17 @@ class SnakeGame {
 		int length;
 	} snake;
 
-	sf::Keyboard::Key getInput();
+	Direction getInput();
+	std::vector<sf::Keyboard::Key> inputs;
+	sf::Keyboard::Key key_up, key_down, key_left, key_right;
+
 public:
 
 	SnakeGame(int, int, int, int);
 	~SnakeGame();
 
 	void setColor(sf::Color);
+	void setKeys(sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key);
 
 	void update();
 	void draw(sf::RenderTarget &);

@@ -28,7 +28,9 @@ int main(int argc, char *argv[]) {
 	obstacles.add(Obstacle(c2V(window.getSize().x - 24, 24), c2V(window.getSize().x, window.getSize().y - 24)));
 	
 	SnakeGame game1(24, 24, window.getSize().x / 2.0 - 5.0, window.getSize().y - 24);
+	game1.setColor(sf::Color(50, 115, 186));
 	SnakeGame game2(window.getSize().x / 2.0 + 5.0, 24, window.getSize().x - 24, window.getSize().y - 24);
+	game2.setColor(sf::Color(186, 115, 50));
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -46,8 +48,13 @@ int main(int argc, char *argv[]) {
 			};
 		}
 
+		game1.receiveInput();
+		game2.receiveInput();
+		
+		game1.update();
+		game2.update();
+
 		ball.update();
-	
 		obstacles.collide(ball, background);
 
 		/* Rendering */
